@@ -14,13 +14,16 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+// import 'package:url_launcher/url_launcher.dart';
+// import 'package:connectivity/connectivity.dart';
 
 part "src/extensions.dart";
 part "src/functions.dart";
@@ -28,3 +31,5 @@ part "src/functions.dart";
 part "localize/localize.dart";
 
 part "prefs/prefs.dart";
+
+part "config/config.dart";

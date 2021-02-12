@@ -147,7 +147,210 @@ extension StringExtensions on String {
   }
 }
 
-extension MapExtensions on Map<String, dynamic> {
+extension NullableStringExtensions on String? {
+  bool get isEmpty {
+    if (this == null) {
+      return true;
+    }
+    return this!.isEmpty;
+  }
+
+  bool get isNotEmpty {
+    if (this == null) {
+      return false;
+    }
+    return this!.isNotEmpty;
+  }
+
+  int get length {
+    if (this == null) {
+      return 0;
+    }
+    return this!.length;
+  }
+
+  String def(String defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension NullableIterableExtensions<T> on Iterable<T>? {
+  bool get isEmpty {
+    if (this == null) {
+      return true;
+    }
+    return this!.isEmpty;
+  }
+
+  bool get isNotEmpty {
+    if (this == null) {
+      return false;
+    }
+    return this!.isNotEmpty;
+  }
+
+  int get length {
+    if (this == null) {
+      return 0;
+    }
+    return this!.length;
+  }
+
+  bool contains(Object? element) {
+    if (this == null) {
+      return false;
+    }
+    return this!.contains(element);
+  }
+
+  Iterable<T> def(Iterable<T> defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension NullableListExtensions<T> on List<T>? {
+  List<T> def(List<T> defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension NullableMapExtensions<K, V> on Map<K, V>? {
+  bool get isEmpty {
+    if (this == null) {
+      return true;
+    }
+    return this!.isEmpty;
+  }
+
+  bool get isNotEmpty {
+    if (this == null) {
+      return false;
+    }
+    return this!.isNotEmpty;
+  }
+
+  int get length {
+    if (this == null) {
+      return 0;
+    }
+    return this!.length;
+  }
+
+  bool containsKey(Object? element) {
+    if (this == null) {
+      return false;
+    }
+    return this!.containsKey(element);
+  }
+
+  bool containsValue(Object? element) {
+    if (this == null) {
+      return false;
+    }
+    return this!.containsValue(element);
+  }
+
+  Map<K, V> def(Map<K, V> defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension NullableSetExtensions<T> on Set<T>? {
+  bool get isEmpty {
+    if (this == null) {
+      return true;
+    }
+    return this!.isEmpty;
+  }
+
+  bool get isNotEmpty {
+    if (this == null) {
+      return false;
+    }
+    return this!.isNotEmpty;
+  }
+
+  int get length {
+    if (this == null) {
+      return 0;
+    }
+    return this!.length;
+  }
+
+  bool contains(Object? element) {
+    if (this == null) {
+      return false;
+    }
+    return this!.contains(element);
+  }
+
+  Set<T> def(Set<T> defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension NullableIntExtensions on int? {
+  bool get isEmpty {
+    if (this == null) {
+      return true;
+    }
+    return this!.isEmpty;
+  }
+
+  bool get isNotEmpty {
+    if (this == null) {
+      return false;
+    }
+    return this!.isNotEmpty;
+  }
+
+  int def(int defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension NullableDoubleExtensions on double? {
+  bool get isEmpty {
+    if (this == null) {
+      return true;
+    }
+    return this!.isEmpty;
+  }
+
+  bool get isNotEmpty {
+    if (this == null) {
+      return false;
+    }
+    return this!.isNotEmpty;
+  }
+
+  double def(double defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this!;
+  }
+}
+
+extension MapStringDynamicExtensions on Map<String, dynamic> {
   T? get<T>(String key, [T? orElse]) {
     assert(key.isNotEmpty, "The key is empty.");
     if (!containsKey(key)) {
@@ -157,7 +360,22 @@ extension MapExtensions on Map<String, dynamic> {
   }
 }
 
+extension MapExtensions<TKey, TValue> on Map<TKey, TValue> {
+  /// Convert it to a list through [callback].
+  ///
+  /// [callback]: Callback function.
+  Iterable<T> toList<T>(T Function(TKey key, TValue value) callback) sync* {
+    for (final tmp in entries) {
+      yield callback(tmp.key, tmp.value);
+    }
+  }
+}
+
 extension IntExtensions on int {
+  bool get isEmpty => this == 0;
+
+  bool get isNotEmpty => this != 0;
+
   /// Restrict value from [min] to [max].
   ///
   /// [min]: Minimum value.
@@ -204,6 +422,10 @@ extension IntExtensions on int {
 }
 
 extension DoubleExtensions on double {
+  bool get isEmpty => this == 0.0;
+
+  bool get isNotEmpty => this != 0.0;
+
   /// Restrict value from [min] to [max].
   ///
   /// [min]: Minimum value.
@@ -371,7 +593,7 @@ extension DateTimeExtension on DateTime {
 }
 
 /// Iterable extension methods.
-extension IterableExtension<T extends Object> on Iterable<T> {
+extension IterableExtensions<T> on Iterable<T> {
   /// Remove duplicate values from the list.
   List<T> distinct() => toSet().toList();
 
@@ -390,15 +612,14 @@ extension IterableExtension<T extends Object> on Iterable<T> {
   /// After replacing the data in the list, delete the null.
   ///
   /// [callback]: Callback function used in map.
-  List<TCast> mapAndRemoveEmpty<TCast extends Object>(
-      TCast? Function(T item) callback) {
+  List<TCast> mapAndRemoveEmpty<TCast>(TCast? Function(T item) callback) {
     return map<TCast?>(callback).removeEmpty();
   }
 
   /// After replacing the data in the list, delete the null.
   ///
   /// [callback]: Callback function used in expand.
-  List<TCast> expandAndRemoveEmpty<TCast extends Object>(
+  List<TCast> expandAndRemoveEmpty<TCast>(
       Iterable<TCast?> Function(T item) callback) {
     return expand<TCast?>(callback).removeEmpty();
   }
@@ -434,7 +655,7 @@ extension IterableExtension<T extends Object> on Iterable<T> {
   ///
   /// [key]: Callback to get the key from the element.
   /// [value]: Callback to get the value from the element.
-  Map<K, V> toMap<K extends Object, V extends Object>({
+  Map<K, V> toMap<K, V>({
     K Function(dynamic e)? key,
     V Function(dynamic e)? value,
   }) {
@@ -465,7 +686,7 @@ extension IterableExtension<T extends Object> on Iterable<T> {
 }
 
 /// Iterable extension methods.
-extension NullableIterableExtension<T> on Iterable<T?> {
+extension NullableValueIterableExtensions<T> on Iterable<T?> {
   /// If the iterator value is empty, delete the element.
   List<T> removeEmpty() {
     final list = <T>[];
@@ -480,7 +701,7 @@ extension NullableIterableExtension<T> on Iterable<T?> {
 }
 
 /// List extension methods.
-extension ListExtension<T extends Object> on List<T> {
+extension ListExtensions<T> on List<T> {
   /// Insert the element first.
   ///
   /// [element]: The element to insert.

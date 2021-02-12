@@ -120,7 +120,7 @@ class Localize {
     if (deviceLocale.isEmpty) {
       return;
     }
-    if (locale == null || locale.isEmpty) {
+    if (locale.isEmpty) {
       _locale = deviceLocale;
       if (_locale.isEmpty) {
         _locale = "en_US";
@@ -128,7 +128,7 @@ class Localize {
       initializeDateFormatting(_locale);
       _language = _locale.split("_").first;
     } else {
-      _locale = locale;
+      _locale = locale!;
       initializeDateFormatting(locale);
       _language = _locale.split("_").first;
     }
