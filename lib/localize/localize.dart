@@ -69,7 +69,7 @@ class Localize {
   /// [timeout]: Timeout time.
   /// [locale]: Default locale.
   static Future initialize(
-      {String path = "Localization.csv",
+      {String path = "assets/Localization.csv",
       Duration timeout = const Duration(seconds: 5),
       String? locale}) async {
     try {

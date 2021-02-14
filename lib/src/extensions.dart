@@ -147,6 +147,21 @@ extension StringExtensions on String {
   }
 }
 
+extension NullableObjectExtensions on Object? {
+  T def<T extends Object?>(T defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return this as T;
+  }
+}
+
+extension NonNullableObjectExtensions on Object {
+  T def<T extends Object>(T defaultValue) {
+    return this as T;
+  }
+}
+
 extension NullableStringExtensions on String? {
   bool get isEmpty {
     if (this == null) {
@@ -167,13 +182,6 @@ extension NullableStringExtensions on String? {
       return 0;
     }
     return this!.length;
-  }
-
-  String def(String defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
   }
 }
 
@@ -204,22 +212,6 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
       return false;
     }
     return this!.contains(element);
-  }
-
-  Iterable<T> def(Iterable<T> defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
-  }
-}
-
-extension NullableListExtensions<T> on List<T>? {
-  List<T> def(List<T> defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
   }
 }
 
@@ -258,13 +250,6 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     }
     return this!.containsValue(element);
   }
-
-  Map<K, V> def(Map<K, V> defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
-  }
 }
 
 extension NullableSetExtensions<T> on Set<T>? {
@@ -295,13 +280,6 @@ extension NullableSetExtensions<T> on Set<T>? {
     }
     return this!.contains(element);
   }
-
-  Set<T> def(Set<T> defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
-  }
 }
 
 extension NullableIntExtensions on int? {
@@ -318,13 +296,6 @@ extension NullableIntExtensions on int? {
     }
     return this!.isNotEmpty;
   }
-
-  int def(int defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
-  }
 }
 
 extension NullableDoubleExtensions on double? {
@@ -340,13 +311,6 @@ extension NullableDoubleExtensions on double? {
       return false;
     }
     return this!.isNotEmpty;
-  }
-
-  double def(double defaultValue) {
-    if (this == null) {
-      return defaultValue;
-    }
-    return this!;
   }
 }
 
