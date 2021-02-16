@@ -1,6 +1,6 @@
 name: katana
 description: Package containing a collection of basic Flutter utilities.
-version: 0.8.0-nullsafety.19
+version: 0.8.0-nullsafety.20
 homepage: https://mathru.net
 repository: https://github.com/mathrunet/flutter_katana
 
