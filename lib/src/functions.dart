@@ -4,7 +4,7 @@ part of katana;
 ///
 /// A 32-byte string without hyphens is output.
 String get uuid {
-  final uuid = Uuid();
+  const uuid = Uuid();
   return uuid.v4().replaceAll("-", "");
 }
 
