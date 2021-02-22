@@ -573,6 +573,15 @@ extension IterableExtensions<T> on Iterable<T> {
     return this;
   }
 
+  T? firstWhereOrNull(bool Function(T) test) {
+    for (final element in this) {
+      if (test(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
+
   /// After replacing the data in the list, delete the null.
   ///
   /// [callback]: Callback function used in map.
