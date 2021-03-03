@@ -27,8 +27,8 @@ class Config {
       _uid = Prefs.getString(_uidKey);
     }
     if (!isWeb) {
-      _temporaryDirectory = (await getTemporaryDirectory())!;
-      _documentDirectory = (await getApplicationDocumentsDirectory())!;
+      _temporaryDirectory = await getTemporaryDirectory();
+      _documentDirectory = await getApplicationDocumentsDirectory();
       _libraryDirectory = (isAndroid
           ? await getExternalStorageDirectory()
           : await getLibraryDirectory())!;
@@ -61,14 +61,14 @@ class Config {
   ///
   /// [onConnected]: Callbacks on connection.
   /// [onDisconnected]: Callbacks when you're not connected.
-  // static Future<ConnectivityResult> connect(
-  //     {VoidCallback? onConnected, VoidCallback? onDisconnected}) async {
-  //   final result = await Connectivity().checkConnectivity();
-  //   if (result == ConnectivityResult.none) {
-  //     onDisconnected?.call();
-  //   } else {
-  //     onConnected?.call();
-  //   }
-  //   return result;
-  // }
+  static Future<ConnectivityResult> connect(
+      {VoidCallback? onConnected, VoidCallback? onDisconnected}) async {
+    final result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      onDisconnected?.call();
+    } else {
+      onConnected?.call();
+    }
+    return result;
+  }
 }

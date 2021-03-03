@@ -12,11 +12,11 @@ String get uuid {
 ///
 /// [url]: URL to open.
 Future openURL(String url) async {
-  // if (await canLaunch(url)) {
-  //   await launch(url);
-  // } else {
-  //   print("Could not Launch $url");
-  // }
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print("Could not Launch $url");
+  }
 }
 
 /// Json decoding.
