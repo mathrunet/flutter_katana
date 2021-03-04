@@ -148,16 +148,10 @@ extension StringExtensions on String {
 }
 
 extension NullableObjectExtensions on Object? {
-  T def<T extends Object?>(T defaultValue) {
+  T def<T>(T defaultValue) {
     if (this == null) {
       return defaultValue;
     }
-    return this as T;
-  }
-}
-
-extension NonNullableObjectExtensions on Object {
-  T def<T extends Object>(T defaultValue) {
     return this as T;
   }
 }
@@ -315,7 +309,7 @@ extension NullableDoubleExtensions on double? {
 }
 
 extension MapStringDynamicExtensions on Map<String, dynamic> {
-  T? get<T>(String key, [T? orElse]) {
+  T get<T>(String key, T orElse) {
     assert(key.isNotEmpty, "The key is empty.");
     if (!containsKey(key)) {
       return orElse;

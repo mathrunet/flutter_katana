@@ -17,7 +17,7 @@ class Prefs {
   static SharedPreferences? _preferences;
 
   /// Initialize the data.
-  static Future initialize() async {
+  static Future<void> initialize() async {
     if (isInitialized) {
       return;
     }
@@ -25,9 +25,12 @@ class Prefs {
   }
 
   /// Update data.
-  static Future reload() async {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+  static Future<void> reload() async {
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return;
+    }
     await _preferences?.reload();
   }
 
@@ -36,8 +39,11 @@ class Prefs {
   /// [key]: Key to get.
   /// [defaultValue]: Default value when there is no data.
   static T? get<T>(String key, [T? defaultValue]) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return null;
+    }
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -49,8 +55,11 @@ class Prefs {
   /// [key]: Key to get.
   /// [defaultValue]: Default value when there is no data.
   static String getString(String key, [String defaultValue = ""]) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return "";
+    }
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -63,8 +72,11 @@ class Prefs {
   /// [defaultValue]: Default value when there is no data.
   static List<String> getStringList(String key,
       [List<String> defaultValue = const []]) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return const [];
+    }
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -76,8 +88,11 @@ class Prefs {
   /// [key]: Key to get.
   /// [defaultValue]: Default value when there is no data.
   static int getInt(String key, [int defaultValue = 0]) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return 0;
+    }
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -89,8 +104,11 @@ class Prefs {
   /// [key]: Key to get.
   /// [defaultValue]: Default value when there is no data.
   static double getDouble(String key, [double defaultValue = 0.0]) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return 0.0;
+    }
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -102,8 +120,11 @@ class Prefs {
   /// [key]: Key to get.
   /// [defaultValue]: Default value when there is no data.
   static bool getBool(String key, [bool defaultValue = false]) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return false;
+    }
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -112,8 +133,11 @@ class Prefs {
 
   /// Get all stored keys.
   static Set<String> get keys {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return const {};
+    }
     return _preferences?.getKeys() ?? const {};
   }
 
@@ -123,8 +147,11 @@ class Prefs {
   ///
   /// [key]: Key to check.
   static bool containsKey(String key) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return false;
+    }
     return _preferences?.containsKey(key) ?? false;
   }
 
@@ -133,9 +160,12 @@ class Prefs {
   /// [key]: Key to save.
   /// [value]: Value to save.
   static void set(String key, dynamic value) {
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return;
+    }
     assert(value != null, "The value is empty.");
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
     switch (value.runtimeType) {
       case int:
         _preferences?.setInt(key, value);
@@ -159,15 +189,21 @@ class Prefs {
   ///
   /// [key]: Key to delete.
   static void remove(String key) {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return;
+    }
     _preferences?.remove(key);
   }
 
   /// Initialize the data.
   static void clear() {
-    assert(isInitialized,
-        "It has not been initialized. Please initialize it by executing [init()].");
+    if (!isInitialized) {
+      debugPrint(
+          "It has not been initialized. Please initialize it by executing [initialize()].");
+      return;
+    }
     _preferences?.clear();
   }
 }
