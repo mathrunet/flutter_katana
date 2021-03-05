@@ -327,6 +327,17 @@ extension MapExtensions<TKey, TValue> on Map<TKey, TValue> {
       yield callback(tmp.key, tmp.value);
     }
   }
+
+  Map<TKey, TValue> addWith(Map<TKey, TValue> other, Iterable<TKey> keys) {
+    for (final key in keys) {
+      if (!other.containsKey(key)) {
+        continue;
+      }
+      // ignore: null_check_on_nullable_type_parameter
+      this[key] = other[key]!;
+    }
+    return this;
+  }
 }
 
 extension IntExtensions on int {
