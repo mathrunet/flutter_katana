@@ -8,10 +8,32 @@ String get uuid {
   return uuid.v4().replaceAll("-", "");
 }
 
+/// Create a code of length [length] randomly for id.
+///
+/// Characters that are difficult to understand are omitted.
+///
+/// [seed] can be specified.
+///
+/// [length]: Cord length.
+/// [seed]: Seed number.
+String generateCode(int length,
+    {int seed = 0, String charSet = "23456789abcdefghjkmnpqrstuvwxy"}) {
+  final _length = charSet.length;
+  final rand = seed != 0 ? Random(seed) : Random();
+  final codeUnits = List.generate(
+    length,
+    (index) {
+      final n = rand.nextInt(_length);
+      return charSet.codeUnitAt(n);
+    },
+  );
+  return String.fromCharCodes(codeUnits);
+}
+
 /// Open a new external URL.
 ///
 /// [url]: URL to open.
-Future openURL(String url) async {
+Future<void> openURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
