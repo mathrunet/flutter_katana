@@ -1,6 +1,6 @@
 name: katana
-description: Package containing a collection of basic Flutter utilities.
-version: 0.8.0-nullsafety.32
+description: Package containing a collection of basic Flutter utilities. It provides the base part of the Masamune framework.
+version: 0.8.1+11
 homepage: https://mathru.net
 repository: https://github.com/mathrunet/flutter_katana
 
@@ -17,8 +17,7 @@ dependencies:
   csv: ^5.0.0-nullsafety
   intl: ^0.17.0
   uuid: ^3.0.1
-  shared_preferences: ^2.0.3
-  path_provider: ^2.0.1
+  shared_preferences: ^2.0.4
   url_launcher: ^6.0.2
   connectivity: ^3.0.2
 

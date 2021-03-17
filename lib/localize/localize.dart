@@ -4,7 +4,15 @@ part of katana;
 ///
 /// Execute the [initialize()] method and load the csv file.
 ///
+/// ```
+/// await Localize.initialize();
+/// ```
+///
 /// After that, display the translated text by executing the [get()] method.
+///
+/// ```
+/// final localizeName = Localize.get("Name");
+/// ```
 class Localize {
   Localize._();
 
@@ -54,8 +62,10 @@ class Localize {
 
   /// Get translated text.
   ///
-  /// [key]: Key to get.
-  /// [defaultValue]: Initial value.
+  /// Get the translation by specifying the [key].
+  ///
+  /// By specifying [defaultValue],
+  /// you can determine the value if [key] is not found.
   static String get(String key, {String? defaultValue}) {
     if (!(_document?.containsKey(key) ?? false)) {
       return defaultValue ?? key;
@@ -65,13 +75,12 @@ class Localize {
 
   /// Initialize localization.
   ///
-  /// [path]: Translation file path.
-  /// [timeout]: Timeout time.
-  /// [locale]: Default locale.
-  static Future initialize(
-      {String path = "assets/Localization.csv",
-      Duration timeout = const Duration(seconds: 5),
-      String? locale}) async {
+  /// You can specify the asset path of the Localization file in [path].
+  static Future<void> initialize({
+    String path = "assets/Localization.csv",
+    Duration timeout = const Duration(seconds: 5),
+    String? locale,
+  }) async {
     try {
       if (isInitialized) {
         return;
@@ -116,7 +125,8 @@ class Localize {
     } catch (e) {
       print("[$path] was not found.");
     }
-    final deviceLocale = Platform.localeName;
+    final deviceLocale =
+        Config.isWeb ? ui.window.locale.toString() : Platform.localeName;
     if (deviceLocale.isEmpty) {
       return;
     }

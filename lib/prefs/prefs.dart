@@ -5,8 +5,8 @@ part of katana;
 /// After initializing and initializing the data, get and save the data.
 ///
 /// ```
-/// await Prefs.init();
-/// String data = Prefs.get("key");
+/// await Prefs.initialize();
+/// final data = Prefs.get("key");
 /// Prefs.set( "test", "data" );
 /// ```
 class Prefs {
@@ -17,6 +17,8 @@ class Prefs {
   static SharedPreferences? _preferences;
 
   /// Initialize the data.
+  ///
+  /// Please execute it when the application starts.
   static Future<void> initialize() async {
     if (isInitialized) {
       return;
@@ -25,6 +27,8 @@ class Prefs {
   }
 
   /// Update data.
+  ///
+  /// Used to update the data.
   static Future<void> reload() async {
     if (!isInitialized) {
       debugPrint(
@@ -36,8 +40,10 @@ class Prefs {
 
   /// Get the data.
   ///
-  /// [key]: Key to get.
-  /// [defaultValue]: Default value when there is no data.
+  /// Specify the key of the value you want to get for [key].
+  ///
+  /// If the value does not exist in the specified [key],
+  /// the value of [defaultValue] will be returned.
   static T? get<T>(String key, [T? defaultValue]) {
     if (!isInitialized) {
       debugPrint(
@@ -50,10 +56,12 @@ class Prefs {
     return _preferences?.get(key) as T ?? defaultValue;
   }
 
-  /// Get the data.
+  /// Get the data as String.
   ///
-  /// [key]: Key to get.
-  /// [defaultValue]: Default value when there is no data.
+  /// Specify the key of the value you want to get for [key].
+  ///
+  /// If the value does not exist in the specified [key],
+  /// the value of [defaultValue] will be returned.
   static String getString(String key, [String defaultValue = ""]) {
     if (!isInitialized) {
       debugPrint(
@@ -66,10 +74,12 @@ class Prefs {
     return _preferences?.getString(key) ?? defaultValue;
   }
 
-  /// Get the data.
+  /// Get the data as list of String.
   ///
-  /// [key]: Key to get.
-  /// [defaultValue]: Default value when there is no data.
+  /// Specify the key of the value you want to get for [key].
+  ///
+  /// If the value does not exist in the specified [key],
+  /// the value of [defaultValue] will be returned.
   static List<String> getStringList(String key,
       [List<String> defaultValue = const []]) {
     if (!isInitialized) {
@@ -83,10 +93,12 @@ class Prefs {
     return _preferences?.getStringList(key) ?? defaultValue;
   }
 
-  /// Get the data.
+  /// Get the data as int.
   ///
-  /// [key]: Key to get.
-  /// [defaultValue]: Default value when there is no data.
+  /// Specify the key of the value you want to get for [key].
+  ///
+  /// If the value does not exist in the specified [key],
+  /// the value of [defaultValue] will be returned.
   static int getInt(String key, [int defaultValue = 0]) {
     if (!isInitialized) {
       debugPrint(
@@ -115,10 +127,12 @@ class Prefs {
     return _preferences?.getDouble(key) ?? defaultValue;
   }
 
-  /// Get the data.
+  /// Get the data as bool.
   ///
-  /// [key]: Key to get.
-  /// [defaultValue]: Default value when there is no data.
+  /// Specify the key of the value you want to get for [key].
+  ///
+  /// If the value does not exist in the specified [key],
+  /// the value of [defaultValue] will be returned.
   static bool getBool(String key, [bool defaultValue = false]) {
     if (!isInitialized) {
       debugPrint(
@@ -143,9 +157,7 @@ class Prefs {
 
   /// Check if data exists.
   ///
-  /// True if data exists.
-  ///
-  /// [key]: Key to check.
+  /// If the value specified in [key] exists, [true] will be returned.
   static bool containsKey(String key) {
     if (!isInitialized) {
       debugPrint(
@@ -157,8 +169,9 @@ class Prefs {
 
   /// Save the data.
   ///
-  /// [key]: Key to save.
-  /// [value]: Value to save.
+  /// The [value] will be saved to the specified [key].
+  ///
+  /// For [value], [int], [double], [String], [bool], and [List] can be specified.
   static void set(String key, dynamic value) {
     if (!isInitialized) {
       debugPrint(
@@ -186,8 +199,6 @@ class Prefs {
   }
 
   /// Delete [key] from data.
-  ///
-  /// [key]: Key to delete.
   static void remove(String key) {
     if (!isInitialized) {
       debugPrint(

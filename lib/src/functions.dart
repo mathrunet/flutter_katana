@@ -13,9 +13,6 @@ String get uuid {
 /// Characters that are difficult to understand are omitted.
 ///
 /// [seed] can be specified.
-///
-/// [length]: Cord length.
-/// [seed]: Seed number.
 String generateCode(int length,
     {int seed = 0, String charSet = "23456789abcdefghjkmnpqrstuvwxy"}) {
   final _length = charSet.length;
@@ -30,9 +27,7 @@ String generateCode(int length,
   return String.fromCharCodes(codeUnits);
 }
 
-/// Open a new external URL.
-///
-/// [url]: URL to open.
+/// Open a new external [url].
 Future<void> openURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
@@ -41,12 +36,11 @@ Future<void> openURL(String url) async {
   }
 }
 
-/// Json decoding.
+/// [json] decoding.
 ///
 /// Only maps are output. If it is not a map, null is output.
 ///
-/// [json]: Json string.
-/// [defaultValue]: Default value.
+/// If Json cannot be converted, [defaultValue] will be returned.
 Map<String, T> jsonDecodeAsMap<T extends Object>(String json,
     [Map<String, T> defaultValue = const {}]) {
   try {
@@ -56,12 +50,11 @@ Map<String, T> jsonDecodeAsMap<T extends Object>(String json,
   return defaultValue;
 }
 
-/// Json decoding.
+/// [json] decoding.
 ///
 /// Only lists are output. If it is not a list, null is output.
 ///
-/// [json]: Json string.
-/// [defaultValue]: Default value.
+/// If Json cannot be converted, [defaultValue] will be returned.
 List<T> jsonDecodeAsList<T extends Object>(String json,
     [List<T> defaultValue = const []]) {
   try {

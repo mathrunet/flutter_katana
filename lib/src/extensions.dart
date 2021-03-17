@@ -6,8 +6,6 @@ extension StringExtensions on String {
   /// Measure the length of [path].
   ///
   /// By entering [separator], it can be used for purposes other than paths.
-  ///
-  /// [separator]: Separator, default is [/].
   int splitLength({String separator = "/"}) {
     if (isEmpty) {
       return 0;
@@ -17,6 +15,9 @@ extension StringExtensions on String {
     return length;
   }
 
+  /// Get the path of the parent from the current string.
+  ///
+  /// By entering [separator], it can be used for purposes other than paths.
   String parentPath({String separator = "/"}) {
     if (isEmpty) {
       return this;
@@ -61,7 +62,7 @@ extension StringExtensions on String {
 
   /// Trim with specific characters.
   ///
-  /// [chars]: The string to trim.
+  /// Specify the character string to be trimmed in [chars].
   String trimString(String chars) {
     final pattern = chars.isNotEmpty
         ? RegExp("^[$chars]+|[$chars]+\$")
@@ -71,7 +72,7 @@ extension StringExtensions on String {
 
   /// Trim only the left side with a specific string.
   ///
-  /// [chars]: The string to trim.
+  /// Specify the character string to be trimmed in [chars].
   String trimStringLeft(String chars) {
     final pattern = chars.isNotEmpty ? RegExp("^[$chars]+") : RegExp(r"^\s+");
     return replaceAll(pattern, "");
@@ -79,7 +80,7 @@ extension StringExtensions on String {
 
   /// Trim only the right side with a specific string.
   ///
-  /// [chars]: The string to trim.
+  /// Specify the character string to be trimmed in [chars].
   String trimStringRight(String chars) {
     final pattern = chars.isNotEmpty ? RegExp("[$chars]+\$") : RegExp(r"\s+$");
     return replaceAll(pattern, "");
@@ -140,14 +141,23 @@ extension StringExtensions on String {
 
   /// Convert to SHA256 hash.
   ///
-  /// [password]: Password.
+  /// Set the password for encoding to [password].
   String toSHA256(String password) {
     final hmacSha256 = Hmac(sha256, utf8.encode(password));
     return hmacSha256.convert(utf8.encode(this)).toString();
   }
+
+  /// Get translated text.
+  String localize() => Localize.get(this, defaultValue: this);
 }
 
 extension NullableObjectExtensions on Object? {
+  /// Specifies the initial value when the value is [Null].
+  ///
+  /// If the value is [Null],
+  /// the value specified by [defaultValue] will be returned.
+  ///
+  /// All returned values will be of type non-null.
   T def<T>(T defaultValue) {
     if (this == null) {
       return defaultValue;
@@ -157,6 +167,7 @@ extension NullableObjectExtensions on Object? {
 }
 
 extension NullableStringExtensions on String? {
+  /// Whether this string is empty.
   bool get isEmpty {
     if (this == null) {
       return true;
@@ -164,6 +175,7 @@ extension NullableStringExtensions on String? {
     return this!.isEmpty;
   }
 
+  /// Whether this string is not empty
   bool get isNotEmpty {
     if (this == null) {
       return false;
@@ -171,15 +183,38 @@ extension NullableStringExtensions on String? {
     return this!.isNotEmpty;
   }
 
+  /// The length of the string.
+  ///
+  /// Returns the number of UTF-16 code units in this string.
+  /// The number of runes might be fewer,
+  /// if the string contains characters outside the Basic Multilingual Plane (plane 0):
+  ///
+  /// 'Dart'.length;          // 4
+  /// 'Dart'.runes.length;    // 4
+  ///
+  /// var clef = '\u{1D11E}';
+  /// clef.length;            // 2
+  /// clef.runes.length;      // 1
   int get length {
     if (this == null) {
       return 0;
     }
     return this!.length;
+  }
+
+  /// Get translated text.
+  String localize(String defaultValue) {
+    if (this == null) {
+      return defaultValue;
+    }
+    return Localize.get(this!, defaultValue: this!);
   }
 }
 
 extension NullableIterableExtensions<T> on Iterable<T>? {
+  /// Returns true if there are no elements in this collection.
+  ///
+  /// May be computed by checking if iterator.moveNext() returns false.
   bool get isEmpty {
     if (this == null) {
       return true;
@@ -187,6 +222,9 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
     return this!.isEmpty;
   }
 
+  /// Returns true if there is at least one element in this collection.
+  ///
+  /// May be computed by checking if iterator.moveNext() returns true.
   bool get isNotEmpty {
     if (this == null) {
       return false;
@@ -194,6 +232,10 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
     return this!.isNotEmpty;
   }
 
+  /// Returns the number of elements in [this].
+  ///
+  /// Counting all elements may involve iterating through all elements and can therefore be slow.
+  /// Some iterables have a more efficient way to find the number of elements.
   int get length {
     if (this == null) {
       return 0;
@@ -201,6 +243,16 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
     return this!.length;
   }
 
+  /// Whether the collection contains an element equal to [element].
+  ///
+  /// This operation will check each element in order for being equal to [element],
+  /// unless it has a more efficient way to find an element equal to [element].
+  ///
+  /// The equality used to determine whether [element] is equal to an element of the iterable defaults to the [Object.==] of the element.
+  ///
+  /// Some types of iterable may have a different equality used for its elements.
+  /// For example, a [Set] may have a custom equality (see [Set.identity]) that its contains uses.
+  /// Likewise the Iterable returned by a [Map.keys] call should use the same equality that the Map uses for keys.
   bool contains(Object? element) {
     if (this == null) {
       return false;
@@ -210,6 +262,7 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
 }
 
 extension NullableMapExtensions<K, V> on Map<K, V>? {
+  /// Whether there is no key/value pair in the map.
   bool get isEmpty {
     if (this == null) {
       return true;
@@ -217,6 +270,7 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     return this!.isEmpty;
   }
 
+  /// Whether there is at least one key/value pair in the map.
   bool get isNotEmpty {
     if (this == null) {
       return false;
@@ -224,6 +278,7 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     return this!.isNotEmpty;
   }
 
+  /// The number of key/value pairs in the map.
   int get length {
     if (this == null) {
       return 0;
@@ -231,6 +286,9 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     return this!.length;
   }
 
+  /// Whether this map contains the given key.
+  ///
+  /// Returns true if any of the keys in the map are equal to key according to the equality used by the map.
   bool containsKey(Object? element) {
     if (this == null) {
       return false;
@@ -238,6 +296,9 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     return this!.containsKey(element);
   }
 
+  /// Whether this map contains the given value.
+  ///
+  /// Returns true if any of the values in the map are equal to value according to the == operator.
   bool containsValue(Object? element) {
     if (this == null) {
       return false;
@@ -247,6 +308,9 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
 }
 
 extension NullableSetExtensions<T> on Set<T>? {
+  /// Returns true if there are no elements in this collection.
+  ///
+  /// May be computed by checking if iterator.moveNext() returns false.
   bool get isEmpty {
     if (this == null) {
       return true;
@@ -254,6 +318,9 @@ extension NullableSetExtensions<T> on Set<T>? {
     return this!.isEmpty;
   }
 
+  /// Returns true if there is at least one element in this collection.
+  ///
+  /// May be computed by checking if iterator.moveNext() returns true.
   bool get isNotEmpty {
     if (this == null) {
       return false;
@@ -261,6 +328,9 @@ extension NullableSetExtensions<T> on Set<T>? {
     return this!.isNotEmpty;
   }
 
+  /// Returns the number of elements in the iterable.
+  ///
+  /// This is an efficient operation that doesn't require iterating through the elements.
   int get length {
     if (this == null) {
       return 0;
@@ -268,6 +338,7 @@ extension NullableSetExtensions<T> on Set<T>? {
     return this!.length;
   }
 
+  /// Whether value is in the set.
   bool contains(Object? element) {
     if (this == null) {
       return false;
@@ -277,38 +348,45 @@ extension NullableSetExtensions<T> on Set<T>? {
 }
 
 extension NullableIntExtensions on int? {
+  /// Whether this int is null or zero.
   bool get isEmpty {
     if (this == null) {
       return true;
     }
-    return this!.isEmpty;
+    return this == 0;
   }
 
+  /// Whether this int is not null or zero.
   bool get isNotEmpty {
     if (this == null) {
       return false;
     }
-    return this!.isNotEmpty;
+    return this != 0;
   }
 }
 
 extension NullableDoubleExtensions on double? {
+  /// Whether this double is null or zero.
   bool get isEmpty {
     if (this == null) {
       return true;
     }
-    return this!.isEmpty;
+    return this == 0.0;
   }
 
+  /// Whether this double is not null or zero.
   bool get isNotEmpty {
     if (this == null) {
       return false;
     }
-    return this!.isNotEmpty;
+    return this != 0.0;
   }
 }
 
 extension MapStringDynamicExtensions on Map<String, dynamic> {
+  /// Get the value corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the value of [orElse] is returned.
   T get<T>(String key, T orElse) {
     assert(key.isNotEmpty, "The key is empty.");
     if (!containsKey(key)) {
@@ -318,16 +396,37 @@ extension MapStringDynamicExtensions on Map<String, dynamic> {
   }
 }
 
+extension NullableMapStringDynamicExtensions on Map<String, dynamic>? {
+  /// Get the value corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the value of [orElse] is returned.
+  ///
+  /// If the map itself is [Null], [orElse] will also be returned.
+  T get<T>(String key, T orElse) {
+    assert(key.isNotEmpty, "The key is empty.");
+    if (this == null || !containsKey(key)) {
+      return orElse;
+    }
+    return this![key] ?? orElse;
+  }
+}
+
 extension MapExtensions<TKey, TValue> on Map<TKey, TValue> {
   /// Convert it to a list through [callback].
-  ///
-  /// [callback]: Callback function.
   Iterable<T> toList<T>(T Function(TKey key, TValue value) callback) sync* {
     for (final tmp in entries) {
       yield callback(tmp.key, tmp.value);
     }
   }
 
+  /// Set only the value of the key specified
+  /// by [keys] in the map specified by [other].
+  ///
+  /// ```
+  /// final main = {"c": 3, "d": 4};
+  /// final other = {"a": 1, "b": 2};
+  /// main.addWith(other, ["a"]);     // {"a": 1, "c": 3, "d": 4}
+  /// ```
   Map<TKey, TValue> addWith(Map<TKey, TValue> other, Iterable<TKey> keys) {
     for (final key in keys) {
       if (!other.containsKey(key)) {
@@ -341,14 +440,13 @@ extension MapExtensions<TKey, TValue> on Map<TKey, TValue> {
 }
 
 extension IntExtensions on int {
+  /// Whether this int is zero.
   bool get isEmpty => this == 0;
 
+  /// Whether this int is not zero.
   bool get isNotEmpty => this != 0;
 
   /// Restrict value from [min] to [max].
-  ///
-  /// [min]: Minimum value.
-  /// [max]: Maximum value.
   int limit(int min, int max) {
     if (this < min) {
       return min;
@@ -360,8 +458,6 @@ extension IntExtensions on int {
   }
 
   /// Restrict value from [min].
-  ///
-  /// [min]: Minimum value.
   int limitLow(int min) {
     if (this < min) {
       return min;
@@ -370,8 +466,6 @@ extension IntExtensions on int {
   }
 
   /// Restrict value from [max].
-  ///
-  /// [max]: Maximum value.
   int limitHigh(int max) {
     if (this > max) {
       return max;
@@ -379,11 +473,9 @@ extension IntExtensions on int {
     return this;
   }
 
-  /// Represents a number in format.
+  /// Represents a number in [format].
   ///
-  /// The format depends on NumberFormat.
-  ///
-  /// [format]: Number format.
+  /// The [format] depends on NumberFormat.
   String format(String format) {
     assert(format.isNotEmpty, "The format is empty.");
     return NumberFormat(format).format(this);
@@ -391,14 +483,13 @@ extension IntExtensions on int {
 }
 
 extension DoubleExtensions on double {
+  /// Whether this int is zero.
   bool get isEmpty => this == 0.0;
 
+  /// Whether this int is not zero.
   bool get isNotEmpty => this != 0.0;
 
   /// Restrict value from [min] to [max].
-  ///
-  /// [min]: Minimum value.
-  /// [max]: Maximum value.
   double limit(double min, double max) {
     if (this < min) {
       return min;
@@ -410,8 +501,6 @@ extension DoubleExtensions on double {
   }
 
   /// Restrict value from [min].
-  ///
-  /// [min]: Minimum value.
   double limitLow(double min) {
     if (this < min) {
       return min;
@@ -420,8 +509,6 @@ extension DoubleExtensions on double {
   }
 
   /// Restrict value from [max].
-  ///
-  /// [max]: Maximum value.
   double limitHigh(double max) {
     if (this > max) {
       return max;
@@ -429,54 +516,36 @@ extension DoubleExtensions on double {
     return this;
   }
 
-  /// Represents a number in format.
+  /// Represents a number in [format].
   ///
-  /// The format depends on NumberFormat.
-  ///
-  /// [format]: Number format.
+  /// The [format] depends on NumberFormat.
   String format(String format) {
     assert(format.isNotEmpty, "The format is empty.");
     return NumberFormat(format).format(this);
   }
 }
 
-/// String extension methods.
-extension LocalizeStringExtensions on String {
-  /// Get translated text.
-  String localize() => Localize.get(this, defaultValue: this);
+extension RandomExtension on Random {
+  /// Get a random number from [min] to [max].
+  int rangeInt(int min, int max) =>
+      ((nextDouble() * (max - min)) + min).toInt().limit(min, max);
+
+  /// Get a random number from [min] to [max].
+  double rangeDouble(double min, double max) =>
+      ((nextDouble() * (max - min)) + min).limit(min, max);
 }
 
-/// DateTime extension methods.
-extension LocalizeDateTimeExtensions on DateTime {
+extension DateTimeExtension on DateTime {
   /// Gets the localized week.
   String get localizedWeekDay => "WeekDay${weekday.toString()}".localize();
 
   /// Gets the localized week.
   String get shortLocalizedWeekDay => "Week${weekday.toString()}".localize();
-}
 
-/// Random extension methods.
-extension RandomExtension on Random {
-  /// Get a random number from [min] to [max].
-  ///
-  /// [min]: Minimum value.
-  /// [max]: Maximum value.
-  int rangeInt(int min, int max) =>
-      ((nextDouble() * (max - min)) + min).toInt().limit(min, max);
-
-  /// Get a random number from [min] to [max].
-  ///
-  /// [min]: Minimum value.
-  /// [max]: Maximum value.
-  double rangeDouble(double min, double max) =>
-      ((nextDouble() * (max - min)) + min).limit(min, max);
-}
-
-/// DateTime extension methods.
-extension DateTimeExtension on DateTime {
   /// True if the specified time or the current time is the same day.
   ///
-  /// [dateTime]: Time to compare.
+  /// Pass the date and time you want to compare to [dateTime].
+  /// If it is not passed, the current date and time is used.
   bool isToday([DateTime? dateTime]) {
     dateTime ??= DateTime.now();
     return year == dateTime.year &&
@@ -486,7 +555,8 @@ extension DateTimeExtension on DateTime {
 
   /// True if the specified time or the current time is the same month.
   ///
-  /// [dateTime]: Time to compare.
+  /// Pass the date and time you want to compare to [dateTime].
+  /// If it is not passed, the current date and time is used.
   bool isThisMonth([DateTime? dateTime]) {
     dateTime ??= DateTime.now();
     return year == dateTime.year && month == dateTime.month;
@@ -502,7 +572,8 @@ extension DateTimeExtension on DateTime {
 
   /// True if the specified time or the current time is the same hour.
   ///
-  /// [dateTime]: Time to compare.
+  /// Pass the date and time you want to compare to [dateTime].
+  /// If it is not passed, the current date and time is used.
   bool isThisHour([DateTime? dateTime]) {
     dateTime ??= DateTime.now();
     return year == dateTime.year &&
@@ -525,7 +596,8 @@ extension DateTimeExtension on DateTime {
 
   /// True if the specified time or the current time is the same second.
   ///
-  /// [dateTime]: Time to compare.
+  /// Pass the date and time you want to compare to [dateTime].
+  /// If it is not passed, the current date and time is used.
   bool isThisSecond([DateTime? dateTime]) {
     dateTime ??= DateTime.now();
     return year == dateTime.year &&
@@ -538,7 +610,7 @@ extension DateTimeExtension on DateTime {
 
   /// Format and output the date.
   ///
-  /// [format]: The format to specify.
+  /// Enter the format of the date and time in [format].
   String format(String format) {
     assert(format.isNotEmpty, "The format is empty.");
     return DateFormat(format).format(this).replaceAll(
@@ -561,14 +633,11 @@ extension DateTimeExtension on DateTime {
   }
 }
 
-/// Iterable extension methods.
 extension IterableExtensions<T> on Iterable<T> {
   /// Remove duplicate values from the list.
   List<T> distinct() => toSet().toList();
 
-  /// Index and loop it.
-  ///
-  /// [callback]: Callback function used in index.
+  /// Index and loop it through [callback].
   Iterable<T> index(T Function(T item, int index) callback) {
     int i = 0;
     for (final tmp in this) {
@@ -578,6 +647,9 @@ extension IterableExtensions<T> on Iterable<T> {
     return this;
   }
 
+  /// Returns the first value found by searching based on the condition specified in [test].
+  ///
+  /// If the value is not found, [Null] is returned.
   T? firstWhereOrNull(bool Function(T) test) {
     for (final element in this) {
       if (test(element)) {
@@ -594,17 +666,13 @@ extension IterableExtensions<T> on Iterable<T> {
     return map<TCast?>(callback).removeEmpty();
   }
 
-  /// After replacing the data in the list, delete the null.
-  ///
-  /// [callback]: Callback function used in expand.
+  /// After replacing the data in the list through [callback], delete the [Null].
   List<TCast> expandAndRemoveEmpty<TCast>(
       Iterable<TCast?> Function(T item) callback) {
     return expand<TCast?>(callback).removeEmpty();
   }
 
-  /// Divides the array by the specified number into an array.
-  ///
-  /// [length]: The number to divide.
+  /// Divides the array by the specified [length] into an array.
   Iterable<Iterable<T>> split(int length) {
     length = length.limit(0, this.length);
     List<T>? tmp;
@@ -629,10 +697,48 @@ extension IterableExtensions<T> on Iterable<T> {
     return res;
   }
 
-  /// Converts the list into a map.
+  /// Creates a Map instance in which the keys and values are computed from the
+  /// [iterable].
   ///
-  /// [key]: Callback to get the key from the element.
-  /// [value]: Callback to get the value from the element.
+  /// For each element of the [iterable], a key/value pair is computed
+  /// by applying [key] and [value] respectively to the element of the iterable.
+  ///
+  /// Equivalent to the map literal:
+  /// ```dart
+  /// <K, V>{for (var v in iterable) key(v): value(v)}
+  /// ```
+  /// The literal is generally preferable because it allows
+  /// for a more precise typing.
+  ///
+  /// The example below creates a new map from a list of integers.
+  /// The keys of `map` are the `list` values converted to strings,
+  /// and the values of the `map` are the squares of the `list` values:
+  /// ```dart
+  /// List<int> list = [1, 2, 3];
+  /// var map = Map<String, int>.fromIterable(list,
+  ///     key: (item) => item.toString(),
+  ///     value: (item) => item * item);
+  /// // map is {"1": 1, "2": 4, "3": 9}
+  /// ```
+  /// If no values are specified for [key] and [value],
+  /// the default is the identity function.
+  /// In that case, the iterable element must be assignable to the
+  /// key or value type of the created map.
+  ///
+  /// In the following example, the keys and corresponding values of `map`
+  /// are the `list` values directly:
+  /// ```dart
+  /// var map = Map<int, int>.fromIterable(list);
+  /// // map is {1: 1, 2: 2, 3: 3}
+  /// ```
+  /// The keys computed by the source [iterable] do not need to be unique.
+  /// The last occurrence of a key will overwrite
+  /// the value of any previous occurrence.
+  ///
+  /// The created map is a [LinkedHashMap].
+  /// A `LinkedHashMap` requires the keys to implement compatible
+  /// `operator==` and `hashCode`.
+  /// It iterates in key insertion order.
   Map<K, V> toMap<K, V>({
     K Function(dynamic e)? key,
     V Function(dynamic e)? value,
@@ -640,10 +746,7 @@ extension IterableExtensions<T> on Iterable<T> {
     return Map.fromIterable(this, key: key, value: value);
   }
 
-  /// Extract an array with a given range of numbers.
-  ///
-  /// [start]: Starting position.
-  /// [end]: End position.
+  /// Extract an array with a given range between [start] and [end].
   List<T> limit(int start, int end) {
     if (this is List) {
       return (this as List).sublist(start, min(length, end + 1)).cast<T>();
@@ -652,18 +755,13 @@ extension IterableExtensions<T> on Iterable<T> {
     }
   }
 
-  /// Extract an array with a given range of numbers.
-  ///
-  /// [start]: Starting position.
+  /// Extract an array with a given range at [start].
   List<T> limitStart(int start) => limit(start, length);
 
-  /// Extract an array with a given range of numbers.
-  ///
-  /// [end]: End position.
+  /// Extract an array with a given range at [end].
   List<T> limitEnd(int end) => limit(0, end);
 }
 
-/// Iterable extension methods.
 extension NullableValueIterableExtensions<T> on Iterable<T?> {
   /// If the iterator value is empty, delete the element.
   List<T> removeEmpty() {
@@ -680,26 +778,19 @@ extension NullableValueIterableExtensions<T> on Iterable<T?> {
 
 /// List extension methods.
 extension ListExtensions<T> on List<T> {
-  /// Insert the element first.
-  ///
-  /// [element]: The element to insert.
+  /// Insert the [element] first.
   List<T> insertFirst(T element) {
     insert(0, element);
     return this;
   }
 
-  /// Insert the element last.
-  ///
-  /// [element]: The element to insert.
+  /// Insert the [element] last.
   List<T> insertLast(T element) {
     add(element);
     return this;
   }
 
-  /// Inserts an element at the element's position if True with a test.
-  ///
-  /// [insert]: The element to insert.
-  /// [test]: The method to test.
+  /// Inserts an [insert] element at the element's position if True with a [test].
   List<T> insertWhere(
       T element, bool Function(T? prev, T? current, T? next) test) {
     for (int i = length - 1; i >= 0; i--) {
