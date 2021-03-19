@@ -21,7 +21,7 @@ class Config {
   static final String _uidKey = "DeviceUniqueIdentifier".toSHA1();
   static late String _uid;
   static late String _flavor;
-  static late bool _isMockup;
+  static late bool _isEnabledMockup;
 
   /// Initialize the configuration.
   ///
@@ -34,7 +34,7 @@ class Config {
       return;
     }
     _flavor = flavor;
-    _isMockup = enableMockup;
+    _isEnabledMockup = enableMockup;
     await Prefs.initialize();
     if (!Prefs.containsKey(_uidKey)) {
       Prefs.set(_uidKey, _uid = uuid);
@@ -72,7 +72,7 @@ class Config {
   /// True if mockup is enabled.
   ///
   /// If this is enabled, it will force a mockup to be displayed.
-  static bool get isMockup => _isMockup;
+  static bool get isEnabledMockup => _isEnabledMockup;
 
   /// Check the connection status.
   ///
