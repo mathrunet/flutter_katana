@@ -243,6 +243,41 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
     return this!.length;
   }
 
+  /// Returns the first element.
+  ///
+  /// Return `null` if the list has no element.
+  T? get firstOrNull {
+    if (this == null || isEmpty) {
+      return null;
+    }
+    return this?.first;
+  }
+
+  /// Returns the last element.
+  ///
+  /// Return `null` if the list has no element.
+  T? get lastOrNull {
+    if (this == null || isEmpty) {
+      return null;
+    }
+    return this?.last;
+  }
+
+  /// Returns the first value found by searching based on the condition specified in [test].
+  ///
+  /// If the value is not found, [Null] is returned.
+  T? firstWhereOrNull(bool Function(T item) test) {
+    if (this == null || isEmpty) {
+      return null;
+    }
+    for (final element in this!) {
+      if (test(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
+
   /// Whether the collection contains an element equal to [element].
   ///
   /// This operation will check each element in order for being equal to [element],
@@ -258,6 +293,60 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
       return false;
     }
     return this!.contains(element);
+  }
+}
+
+extension MapExtensions<K, V> on Map<K, V> {
+  /// Convert it to a list through [callback].
+  Iterable<T> toList<T>(T Function(K key, V value) callback) sync* {
+    for (final tmp in entries) {
+      yield callback(tmp.key, tmp.value);
+    }
+  }
+
+  /// Set only the value of the key specified
+  /// by [keys] in the map specified by [other].
+  ///
+  /// ```
+  /// final main = {"c": 3, "d": 4};
+  /// final other = {"a": 1, "b": 2};
+  /// main.addWith(other, ["a"]);     // {"a": 1, "c": 3, "d": 4}
+  /// ```
+  Map<K, V> addWith(Map<K, V> other, Iterable<K> keys) {
+    for (final key in keys) {
+      if (!other.containsKey(key)) {
+        continue;
+      }
+      // ignore: null_check_on_nullable_type_parameter
+      this[key] = other[key]!;
+    }
+    return this;
+  }
+
+  /// Get the value corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the value of [orElse] is returned.
+  T get<T>(K key, T orElse) {
+    assert(key != null, "The key is empty.");
+    if (!containsKey(key)) {
+      return orElse;
+    }
+    return (this[key] ?? orElse) as T;
+  }
+
+  /// Merges the map in [others] with the current map.
+  ///
+  /// If the same key is found, the value of [others] has priority.
+  Map<K, V> merge(Map<K, V>? others) {
+    others ??= const {};
+    final res = <K, V>{};
+    for (final tmp in entries) {
+      res[tmp.key] = tmp.value;
+    }
+    for (final tmp in others.entries) {
+      res[tmp.key] = tmp.value;
+    }
+    return res;
   }
 }
 
@@ -304,6 +393,34 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
       return false;
     }
     return this!.containsValue(element);
+  }
+
+  /// Get the value corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the value of [orElse] is returned.
+  T get<T>(K key, T orElse) {
+    assert(key != null, "The key is empty.");
+    if (this == null || !containsKey(key)) {
+      return orElse;
+    }
+    return (this![key] ?? orElse) as T;
+  }
+
+  /// Merges the map in [others] with the current map.
+  ///
+  /// If the same key is found, the value of [others] has priority.
+  Map<K, V> merge(Map<K, V>? others) {
+    others ??= const {};
+    final res = <K, V>{};
+    if (this != null) {
+      for (final tmp in this!.entries) {
+        res[tmp.key] = tmp.value;
+      }
+    }
+    for (final tmp in others.entries) {
+      res[tmp.key] = tmp.value;
+    }
+    return res;
   }
 }
 
@@ -380,62 +497,6 @@ extension NullableDoubleExtensions on double? {
       return false;
     }
     return this != 0.0;
-  }
-}
-
-extension MapStringDynamicExtensions on Map<String, dynamic> {
-  /// Get the value corresponding to [key] in the map.
-  ///
-  /// If [key] is not found, the value of [orElse] is returned.
-  T get<T>(String key, T orElse) {
-    assert(key.isNotEmpty, "The key is empty.");
-    if (!containsKey(key)) {
-      return orElse;
-    }
-    return this[key] ?? orElse;
-  }
-}
-
-extension NullableMapStringDynamicExtensions on Map<String, dynamic>? {
-  /// Get the value corresponding to [key] in the map.
-  ///
-  /// If [key] is not found, the value of [orElse] is returned.
-  ///
-  /// If the map itself is [Null], [orElse] will also be returned.
-  T get<T>(String key, T orElse) {
-    assert(key.isNotEmpty, "The key is empty.");
-    if (this == null || !containsKey(key)) {
-      return orElse;
-    }
-    return this![key] ?? orElse;
-  }
-}
-
-extension MapExtensions<TKey, TValue> on Map<TKey, TValue> {
-  /// Convert it to a list through [callback].
-  Iterable<T> toList<T>(T Function(TKey key, TValue value) callback) sync* {
-    for (final tmp in entries) {
-      yield callback(tmp.key, tmp.value);
-    }
-  }
-
-  /// Set only the value of the key specified
-  /// by [keys] in the map specified by [other].
-  ///
-  /// ```
-  /// final main = {"c": 3, "d": 4};
-  /// final other = {"a": 1, "b": 2};
-  /// main.addWith(other, ["a"]);     // {"a": 1, "c": 3, "d": 4}
-  /// ```
-  Map<TKey, TValue> addWith(Map<TKey, TValue> other, Iterable<TKey> keys) {
-    for (final key in keys) {
-      if (!other.containsKey(key)) {
-        continue;
-      }
-      // ignore: null_check_on_nullable_type_parameter
-      this[key] = other[key]!;
-    }
-    return this;
   }
 }
 
@@ -662,10 +723,33 @@ extension IterableExtensions<T> on Iterable<T> {
     return this;
   }
 
+  /// Returns the first element.
+  ///
+  /// Return `null` if the list has no element.
+  T? get firstOrNull {
+    if (isEmpty) {
+      return null;
+    }
+    return first;
+  }
+
+  /// Returns the last element.
+  ///
+  /// Return `null` if the list has no element.
+  T? get lastOrNull {
+    if (isEmpty) {
+      return null;
+    }
+    return last;
+  }
+
   /// Returns the first value found by searching based on the condition specified in [test].
   ///
   /// If the value is not found, [Null] is returned.
-  T? firstWhereOrNull(bool Function(T) test) {
+  T? firstWhereOrNull(bool Function(T item) test) {
+    if (isEmpty) {
+      return null;
+    }
     for (final element in this) {
       if (test(element)) {
         return element;
