@@ -294,6 +294,22 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
     }
     return this!.contains(element);
   }
+
+  /// Returns `true` if any of the given [elements] is in the list.
+  bool containsAny(Iterable<Object?> elements) {
+    if (this == null) {
+      return false;
+    }
+    return elements.any((element) => this!.contains(element));
+  }
+
+  /// Returns `true` if all of the given [elements] is in the list.
+  bool containsAll(Iterable<Object?> elements) {
+    if (this == null) {
+      return false;
+    }
+    return elements.every((element) => this!.contains(element));
+  }
 }
 
 extension MapExtensions<K, V> on Map<K, V> {
@@ -347,6 +363,26 @@ extension MapExtensions<K, V> on Map<K, V> {
       res[tmp.key] = tmp.value;
     }
     return res;
+  }
+
+  /// Returns `true` if any of the given [keys] is in the map.
+  bool containsKeyAny(Iterable<Object?> keys) {
+    return keys.any((element) => containsKey(element));
+  }
+
+  /// Returns `true` if all of the given [keys] is in the map.
+  bool containsKeyAll(Iterable<Object?> keys) {
+    return keys.every((element) => containsKey(element));
+  }
+
+  /// Returns `true` if any of the given [values] is in the map.
+  bool containsValueAny(Iterable<Object?> values) {
+    return values.any((element) => containsValue(element));
+  }
+
+  /// Returns `true` if all of the given [values] is in the map.
+  bool containsValueAll(Iterable<Object?> values) {
+    return values.every((element) => containsValue(element));
   }
 }
 
@@ -422,6 +458,45 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     }
     return res;
   }
+
+  /// Returns `true` if any of the given [keys] is in the map.
+  bool containsKeyAny(Iterable<Object?> keys) {
+    if (this == null) {
+      return false;
+    }
+    return keys.any((element) => this!.containsKey(element));
+  }
+
+  /// Returns `true` if all of the given [keys] is in the map.
+  bool containsKeyAll(Iterable<Object?> keys) {
+    if (this == null) {
+      return false;
+    }
+    return keys.every((element) => this!.containsKey(element));
+  }
+
+  /// Returns `true` if any of the given [values] is in the map.
+  bool containsValueAny(Iterable<Object?> values) {
+    if (this == null) {
+      return false;
+    }
+    return values.any((element) => this!.containsValue(element));
+  }
+
+  /// Returns `true` if all of the given [values] is in the map.
+  bool containsValueAll(Iterable<Object?> values) {
+    if (this == null) {
+      return false;
+    }
+    return values.every((element) => this!.containsValue(element));
+  }
+}
+
+extension SetExtensions<T> on Set<T> {
+  /// Returns `true` if any of the given [others] is in the list.
+  bool containsAny(Iterable<Object?> others) {
+    return others.any((element) => contains(element));
+  }
 }
 
 extension NullableSetExtensions<T> on Set<T>? {
@@ -461,6 +536,14 @@ extension NullableSetExtensions<T> on Set<T>? {
       return false;
     }
     return this!.contains(element);
+  }
+
+  /// Returns `true` if any of the given [others] is in the list.
+  bool containsAny(Iterable<Object?> others) {
+    if (this == null) {
+      return false;
+    }
+    return others.any((element) => this!.contains(element));
   }
 }
 
@@ -859,6 +942,16 @@ extension IterableExtensions<T> on Iterable<T> {
 
   /// Extract an array with a given range at [end].
   List<T> limitEnd(int end) => limit(0, end);
+
+  /// Returns `true` if any of the given [elements] is in the list.
+  bool containsAny(Iterable<Object?> elements) {
+    return elements.any((element) => contains(element));
+  }
+
+  /// Returns `true` if all of the given [elements] is in the list.
+  bool containsAll(Iterable<Object?> elements) {
+    return elements.every((element) => contains(element));
+  }
 }
 
 extension NullableValueIterableExtensions<T> on Iterable<T?> {
@@ -902,5 +995,28 @@ extension ListExtensions<T> on List<T> {
     }
     insert(0, element);
     return this;
+  }
+}
+
+extension ColorExtensions on Color {
+  /// Makes the color darker.
+  ///
+  /// The higher the value(0.0 - 1.0), the darker the image becomes.
+  Color darken([double amount = 0.1]) {
+    assert(amount >= 0 && amount <= 1);
+    final hsl = HSLColor.fromColor(this);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    return hslDark.toColor();
+  }
+
+  /// Makes the color lighter.
+  ///
+  /// The higher the value(0.0 - 1.0), the lighter the image becomes.
+  Color lighten([double amount = 0.1]) {
+    assert(amount >= 0 && amount <= 1);
+    final hsl = HSLColor.fromColor(this);
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+    return hslLight.toColor();
   }
 }
