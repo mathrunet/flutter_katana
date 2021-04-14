@@ -26,6 +26,23 @@ extension StringExtensions on String {
     return path.replaceAll(_tail, "").trimStringRight(separator);
   }
 
+  /// Splits the text by character.
+  ///
+  /// It is used for searching.
+  List<String> splitByCharacter() {
+    if (isEmpty) {
+      return <String>[];
+    }
+    if (length <= 1) {
+      return [this];
+    }
+    final tmp = <String>[];
+    for (int i = 0; i < length - 1; i++) {
+      tmp.add(substring(i, min(i + 1, length)));
+    }
+    return tmp;
+  }
+
   /// Splits the text using the bigram algorithm.
   ///
   /// It is used for searching.
