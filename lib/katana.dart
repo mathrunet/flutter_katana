@@ -25,6 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:connectivity/connectivity.dart';
+export 'package:sprintf/sprintf.dart';
 
 part "src/extensions.dart";
 part "src/functions.dart";
