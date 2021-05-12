@@ -164,6 +164,13 @@ extension StringExtensions on String {
     return hmacSha256.convert(utf8.encode(this)).toString();
   }
 
+  /// Format for text.
+  ///
+  /// You can assign a value to it by specifying [%s].
+  String format(List<Object> arg) {
+    return sprintf(this, arg);
+  }
+
   /// Get translated text.
   String localize() => Localize.get(this, defaultValue: this);
 }
