@@ -77,6 +77,14 @@ extension StringExtensions on String {
     return tmp;
   }
 
+  /// Removes a query from a URL string.
+  String trimQuery() {
+    if (!contains("?")) {
+      return this;
+    }
+    return split("?").first;
+  }
+
   /// Trim with specific characters.
   ///
   /// Specify the character string to be trimmed in [chars].
@@ -333,6 +341,32 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
       return false;
     }
     return elements.every((element) => this!.contains(element));
+  }
+
+  /// The data in the list of [others] is conditionally given to the current list.
+  ///
+  /// If [test] is `true`, [apply] will be executed.
+  Iterable<K> setWhere<K extends Object>(
+    Iterable<T> others, {
+    required bool Function(T original, T other) test,
+    required K? Function(T original, T other) apply,
+  }) {
+    final tmp = <K>[];
+    if (this == null) {
+      return tmp;
+    }
+    for (final original in this!) {
+      for (final other in others) {
+        if (!test.call(original, other)) {
+          continue;
+        }
+        final res = apply.call(original, other);
+        if (res != null) {
+          tmp.add(res);
+        }
+      }
+    }
+    return tmp;
   }
 }
 
@@ -975,6 +1009,36 @@ extension IterableExtensions<T> on Iterable<T> {
   /// Returns `true` if all of the given [elements] is in the list.
   bool containsAll(Iterable<Object?> elements) {
     return elements.every((element) => contains(element));
+  }
+
+  /// The data in the list of [others] is conditionally given to the current list.
+  ///
+  /// If [test] is `true`, [apply] will be executed.
+  ///
+  /// Otherwise, [orElse] will be executed.
+  Iterable<K> setWhere<K extends Object>(
+    Iterable<T> others, {
+    required bool Function(T original, T other) test,
+    required K? Function(T original, T other) apply,
+    K? Function(T original, T other)? orElse,
+  }) {
+    final tmp = <K>[];
+    for (final original in this) {
+      for (final other in others) {
+        if (!test.call(original, other)) {
+          final res = orElse?.call(original, other);
+          if (res != null) {
+            tmp.add(res);
+          }
+          continue;
+        }
+        final res = apply.call(original, other);
+        if (res != null) {
+          tmp.add(res);
+        }
+      }
+    }
+    return tmp;
   }
 }
 
