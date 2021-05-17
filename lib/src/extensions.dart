@@ -346,23 +346,29 @@ extension NullableIterableExtensions<T> on Iterable<T>? {
   /// The data in the list of [others] is conditionally given to the current list.
   ///
   /// If [test] is `true`, [apply] will be executed.
+  ///
+  /// Otherwise, [orElse] will be executed.
   Iterable<K> setWhere<K extends Object>(
     Iterable<T> others, {
     required bool Function(T original, T other) test,
     required K? Function(T original, T other) apply,
+    K? Function(T original)? orElse,
   }) {
     final tmp = <K>[];
     if (this == null) {
       return tmp;
     }
     for (final original in this!) {
-      for (final other in others) {
-        if (!test.call(original, other)) {
-          continue;
+      final res = others.firstWhereOrNull((item) => test.call(original, item));
+      if (res != null) {
+        final applied = apply.call(original, res);
+        if (applied != null) {
+          tmp.add(applied);
         }
-        final res = apply.call(original, other);
-        if (res != null) {
-          tmp.add(res);
+      } else {
+        final applied = orElse?.call(original);
+        if (applied != null) {
+          tmp.add(applied);
         }
       }
     }
@@ -411,14 +417,20 @@ extension MapExtensions<K, V> on Map<K, V> {
   /// Merges the map in [others] with the current map.
   ///
   /// If the same key is found, the value of [others] has priority.
-  Map<K, V> merge(Map<K, V>? others) {
+  Map<K, V> merge(
+    Map<K, V>? others, {
+    K Function(K key)? convertKeys,
+    V Function(V value)? convertValues,
+  }) {
     others ??= const {};
     final res = <K, V>{};
     for (final tmp in entries) {
       res[tmp.key] = tmp.value;
     }
     for (final tmp in others.entries) {
-      res[tmp.key] = tmp.value;
+      final key = convertKeys?.call(tmp.key) ?? tmp.key;
+      final value = convertValues?.call(tmp.value) ?? tmp.value;
+      res[key] = value;
     }
     return res;
   }
@@ -1020,21 +1032,20 @@ extension IterableExtensions<T> on Iterable<T> {
     Iterable<T> others, {
     required bool Function(T original, T other) test,
     required K? Function(T original, T other) apply,
-    K? Function(T original, T other)? orElse,
+    K? Function(T original)? orElse,
   }) {
     final tmp = <K>[];
     for (final original in this) {
-      for (final other in others) {
-        if (!test.call(original, other)) {
-          final res = orElse?.call(original, other);
-          if (res != null) {
-            tmp.add(res);
-          }
-          continue;
+      final res = others.firstWhereOrNull((item) => test.call(original, item));
+      if (res != null) {
+        final applied = apply.call(original, res);
+        if (applied != null) {
+          tmp.add(applied);
         }
-        final res = apply.call(original, other);
-        if (res != null) {
-          tmp.add(res);
+      } else {
+        final applied = orElse?.call(original);
+        if (applied != null) {
+          tmp.add(applied);
         }
       }
     }
