@@ -30,6 +30,7 @@ export 'package:sprintf/sprintf.dart';
 
 part "src/extensions.dart";
 part "src/functions.dart";
+part "src/const.dart";
 
 part "localize/localize.dart";
 
