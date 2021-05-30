@@ -51,6 +51,27 @@ class Config {
   /// True if it is web.
   static bool get isWeb => kIsWeb;
 
+  /// True for mobile web.
+  static bool get isMobileWeb =>
+      kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.android);
+
+  /// True for desktop web.
+  static bool get isDesktopWeb =>
+      kIsWeb &&
+      defaultTargetPlatform != TargetPlatform.iOS &&
+      defaultTargetPlatform != TargetPlatform.android;
+
+  /// True for mobile.
+  static bool get isMobile =>
+      (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) ||
+      defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.android;
+
+  /// True for desktop.
+  static bool get isDesktop => !isMobile;
+
   /// True if it is debug mode.
   static bool get isDebug => kDebugMode;
 

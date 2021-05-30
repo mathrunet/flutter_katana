@@ -181,6 +181,16 @@ extension StringExtensions on String {
 
   /// Get translated text.
   String localize() => Localize.get(this, defaultValue: this);
+
+  /// Get the first string which is separated by [separator].
+  String first({String separator = "/"}) {
+    return split(separator).firstOrNull ?? "";
+  }
+
+  /// Get the last string which is separated by [separator].
+  String last({String separator = "/"}) {
+    return split(separator).lastOrNull ?? "";
+  }
 }
 
 extension NullableObjectExtensions on Object? {
@@ -240,6 +250,16 @@ extension NullableStringExtensions on String? {
       return defaultValue;
     }
     return Localize.get(this!, defaultValue: this!);
+  }
+
+  /// Get the first string which is separated by [separator].
+  String first({String separator = "/"}) {
+    return this?.split(separator).firstOrNull ?? "";
+  }
+
+  /// Get the last string which is separated by [separator].
+  String last({String separator = "/"}) {
+    return this?.split(separator).lastOrNull ?? "";
   }
 }
 

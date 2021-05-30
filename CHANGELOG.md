@@ -1,3 +1,8 @@
+## [0.8.2] - Update README (2021.05.30)
+
+* Enhanced support for web platforms.
+* Add a const class.
+
 ## [0.8.1] - Update README (2021.03.11)
 
 * Main release to coincide with Flutter 2.
