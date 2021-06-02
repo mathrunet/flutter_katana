@@ -76,4 +76,31 @@ class Const {
 
   /// Answer.
   static const String answer = "answer";
+
+  /// Member.
+  static const String member = "member";
+}
+
+/// A key list for metadata.
+class MetaConst {
+  /// Time.
+  static const String time = "@time";
+
+  /// Locale.
+  static const String locale = "@locale";
+
+  /// Translate.
+  static const String translate = "@translate";
+
+  /// Search.
+  static const String search = "@search";
+
+  /// The title of the PUSH notification.
+  static const String pushName = "@pushTime";
+
+  /// The text of the PUSH notification.
+  static const String pushText = "@pushTime";
+
+  /// The time of the PUSH notification.
+  static const String pushTime = "@pushTime";
 }
