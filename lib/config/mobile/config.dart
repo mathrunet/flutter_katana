@@ -1,4 +1,4 @@
-part of katana;
+part of katana.config.mobile;
 
 /// Class that handles the app config.
 ///
@@ -41,12 +41,41 @@ class Config {
     } else {
       _uid = Prefs.getString(_uidKey);
     }
+    if (!Config.isWeb) {
+      final deviceInfoPlugin = DeviceInfoPlugin();
+      await Future.wait([
+        getTemporaryDirectory()
+            .then((value) => _temporaryDirectory = value.path),
+        getApplicationDocumentsDirectory()
+            .then((value) => _documentDirectory = value.path),
+        PackageInfo.fromPlatform().then((value) => _packageInfo = value),
+        if (Config.isIOS) ...[
+          getLibraryDirectory().then((value) => _libraryDirectory = value.path),
+          deviceInfoPlugin.iosInfo.then((value) => _iosDeviceInfo = value),
+        ],
+        if (Config.isAndroid) ...[
+          getExternalStorageDirectory().then((value) async {
+            if (value == null) {
+              _libraryDirectory =
+                  (await getApplicationDocumentsDirectory()).path;
+            } else {
+              _libraryDirectory = value.path;
+            }
+          }),
+          deviceInfoPlugin.androidInfo
+              .then((value) => _androidDeviceInfo = value),
+        ]
+      ]);
+    }
     _isInitialized = true;
   }
 
   /// Callback called when the user's state is changed.
   static final UserStateChangedCallback onUserStateChanged =
       UserStateChangedCallback._();
+
+  /// Locale name.
+  static String get locale => Platform.localeName;
 
   /// True if it is web.
   static bool get isWeb => kIsWeb;
@@ -109,6 +138,30 @@ class Config {
     }
     return result;
   }
+
+  /// IOS device information.
+  static IosDeviceInfo? get isoDeviceInfo => _iosDeviceInfo;
+  static IosDeviceInfo? _iosDeviceInfo;
+
+  /// Android device information.
+  static AndroidDeviceInfo? get androidDeviceInfo => _androidDeviceInfo;
+  static AndroidDeviceInfo? _androidDeviceInfo;
+
+  /// Package information.
+  static PackageInfo? get packageInfo => _packageInfo;
+  static PackageInfo? _packageInfo;
+
+  /// The directory that stores temporary files.
+  static String get temporaryDirectory => _temporaryDirectory ?? "";
+  static String? _temporaryDirectory;
+
+  /// The directory where you want to save the document file.
+  static String get documentDirectory => _documentDirectory ?? "";
+  static String? _documentDirectory;
+
+  /// The directory where you want to save the library file.
+  static String get libraryDirectory => _libraryDirectory ?? "";
+  static String? _libraryDirectory;
 }
 
 /// Callback class to be called when the user's state is changed.

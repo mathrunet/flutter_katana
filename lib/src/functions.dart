@@ -44,7 +44,7 @@ Future<void> openURL(String url) async {
 Map<String, T> jsonDecodeAsMap<T extends Object>(String json,
     [Map<String, T> defaultValue = const {}]) {
   try {
-    return (jsonDecode(json) as Map<String, dynamic>).cast<String, T>();
+    return (jsonDecode(json) as DynamicMap).cast<String, T>();
     // ignore: empty_catches
   } catch (e) {}
   return defaultValue;

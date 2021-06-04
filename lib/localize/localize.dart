@@ -125,8 +125,7 @@ class Localize {
     } catch (e) {
       print("[$path] was not found.");
     }
-    final deviceLocale =
-        Config.isWeb ? ui.window.locale.toString() : Platform.localeName;
+    final deviceLocale = Config.locale;
     if (deviceLocale.isEmpty) {
       return;
     }

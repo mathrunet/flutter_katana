@@ -10,30 +10,33 @@ library katana;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
-import 'package:uuid/uuid.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:connectivity/connectivity.dart';
-export 'package:sprintf/sprintf.dart';
+import 'package:uuid/uuid.dart';
+import 'config/others/others.dart'
+    if (dart.library.io) 'config/mobile/mobile.dart'
+    if (dart.library.js) 'config/others/others.dart'
+    if (dart.library.html) 'config/others/others.dart';
 
-part "src/extensions.dart";
-part "src/functions.dart";
-part "src/const.dart";
+export 'package:sprintf/sprintf.dart';
+export 'config/others/others.dart'
+    if (dart.library.io) 'config/mobile/mobile.dart'
+    if (dart.library.js) 'config/others/others.dart'
+    if (dart.library.html) 'config/others/others.dart';
 
 part "localize/localize.dart";
-
 part "prefs/prefs.dart";
-
-part "config/config.dart";
+part "src/const.dart";
+part "src/extensions.dart";
+part "src/functions.dart";
+part "src/typedef.dart";
