@@ -431,7 +431,40 @@ extension MapExtensions<K, V> on Map<K, V> {
     if (!containsKey(key)) {
       return orElse;
     }
-    return (this[key] ?? orElse) as T;
+    return (this[key] as T?) ?? orElse;
+  }
+
+  /// Get the list corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the list of [orElse] is returned.
+  List<T> getAsList<T>(K key, [List<T>? orElse]) {
+    assert(key != null, "The key is empty.");
+    if (!containsKey(key)) {
+      return orElse ?? [];
+    }
+    return (this[key] as List?)?.cast<T>() ?? orElse ?? [];
+  }
+
+  /// Get the map corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the map of [orElse] is returned.
+  Map<String, T> getAsMap<T>(K key, [Map<String, T>? orElse]) {
+    assert(key != null, "The key is empty.");
+    if (!containsKey(key)) {
+      return orElse ?? {};
+    }
+    return (this[key] as Map?)?.cast<String, T>() ?? orElse ?? {};
+  }
+
+  /// Get the set corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the set of [orElse] is returned.
+  Set<T> getAsSets<T>(K key, [Set<T>? orElse]) {
+    assert(key != null, "The key is empty.");
+    if (!containsKey(key)) {
+      return orElse ?? {};
+    }
+    return (this[key] as Set?)?.cast<T>() ?? orElse ?? {};
   }
 
   /// Merges the map in [others] with the current map.
@@ -529,7 +562,40 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
     if (this == null || !containsKey(key)) {
       return orElse;
     }
-    return (this![key] ?? orElse) as T;
+    return (this![key] as T?) ?? orElse;
+  }
+
+  /// Get the list corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the list of [orElse] is returned.
+  List<T> getAsList<T>(K key, [List<T>? orElse]) {
+    assert(key != null, "The key is empty.");
+    if (this == null || !containsKey(key)) {
+      return orElse ?? [];
+    }
+    return (this![key] as List?)?.cast<T>() ?? orElse ?? [];
+  }
+
+  /// Get the map corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the map of [orElse] is returned.
+  Map<String, T> getAsMap<T>(K key, [Map<String, T>? orElse]) {
+    assert(key != null, "The key is empty.");
+    if (this == null || !containsKey(key)) {
+      return orElse ?? {};
+    }
+    return (this![key] as Map?)?.cast<String, T>() ?? orElse ?? {};
+  }
+
+  /// Get the set corresponding to [key] in the map.
+  ///
+  /// If [key] is not found, the set of [orElse] is returned.
+  Set<T> getAsSets<T>(K key, [Set<T>? orElse]) {
+    assert(key != null, "The key is empty.");
+    if (this == null || !containsKey(key)) {
+      return orElse ?? {};
+    }
+    return (this![key] as Set?)?.cast<T>() ?? orElse ?? {};
   }
 
   /// Merges the map in [others] with the current map.
