@@ -155,6 +155,24 @@ extension StringExtensions on String {
     return false;
   }
 
+  /// Convert to Double or Int or Bool.
+  dynamic toAny() {
+    if (isEmpty) {
+      return null;
+    }
+    final b = toLowerCase();
+    if (b == "true") {
+      return true;
+    } else if (b == "false") {
+      return false;
+    }
+    final n = num.tryParse(this);
+    if (n != null) {
+      return n;
+    }
+    return this;
+  }
+
   /// Encoded in Base64.
   String toBase64() => utf8.fuse(base64).encode(this);
 
@@ -260,6 +278,24 @@ extension NullableStringExtensions on String? {
   /// Get the last string which is separated by [separator].
   String last({String separator = "/"}) {
     return this?.split(separator).lastOrNull ?? "";
+  }
+
+  /// Convert to Double or Int or Bool.
+  dynamic toAny() {
+    if (isEmpty) {
+      return null;
+    }
+    final b = this!.toLowerCase();
+    if (b == "true") {
+      return true;
+    } else if (b == "false") {
+      return false;
+    }
+    final n = num.tryParse(this!);
+    if (n != null) {
+      return n;
+    }
+    return this;
   }
 }
 
