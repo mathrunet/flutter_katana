@@ -22,6 +22,7 @@ class Config {
   static late String _uid;
   static late String _flavor;
   static late bool _isEnabledMockup;
+  static late int _maxCacheImage;
 
   /// Initialize the configuration.
   ///
@@ -29,12 +30,14 @@ class Config {
   static Future<void> initialize({
     required String flavor,
     bool enableMockup = false,
+    int maxCacheImage = 30,
   }) async {
     if (isInitialized) {
       return;
     }
     _flavor = flavor;
     _isEnabledMockup = enableMockup;
+    _maxCacheImage = maxCacheImage;
     await Prefs.initialize();
     if (!Prefs.containsKey(_uidKey)) {
       Prefs.set(_uidKey, _uid = uuid);
@@ -69,6 +72,9 @@ class Config {
     }
     _isInitialized = true;
   }
+
+  /// The number of images to cache in memory.
+  static int get maxCacheImage => _maxCacheImage;
 
   /// Callback called when the user's state is changed.
   static final UserStateChangedCallback onUserStateChanged =

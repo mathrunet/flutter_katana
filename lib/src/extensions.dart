@@ -503,6 +503,20 @@ extension MapExtensions<K, V> on Map<K, V> {
     return (this[key] as Set?)?.cast<T>() ?? orElse ?? {};
   }
 
+  /// Get the set corresponding to [key] in the DateTime.
+  ///
+  /// If [key] is not found, the set of [orElse] is returned.
+  DateTime getAsDateTime(K key, [DateTime? orElse]) {
+    if (!containsKey(key)) {
+      return orElse ?? DateTime.now();
+    }
+    final millisecondsSinceEpoch = this[key] as int?;
+    if (millisecondsSinceEpoch == null) {
+      return orElse ?? DateTime.now();
+    }
+    return DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+  }
+
   /// Merges the map in [others] with the current map.
   ///
   /// If the same key is found, the value of [others] has priority.
@@ -632,6 +646,20 @@ extension NullableMapExtensions<K, V> on Map<K, V>? {
       return orElse ?? {};
     }
     return (this![key] as Set?)?.cast<T>() ?? orElse ?? {};
+  }
+
+  /// Get the set corresponding to [key] in the DateTime.
+  ///
+  /// If [key] is not found, the set of [orElse] is returned.
+  DateTime getAsDateTime(K key, [DateTime? orElse]) {
+    if (this == null || !containsKey(key)) {
+      return orElse ?? DateTime.now();
+    }
+    final millisecondsSinceEpoch = this![key] as int?;
+    if (millisecondsSinceEpoch == null) {
+      return orElse ?? DateTime.now();
+    }
+    return DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   }
 
   /// Merges the map in [others] with the current map.
